@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secret Surprise</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  overflow: hidden;
+}
+
+.heart {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: pink;
+  transform: rotate(45deg);
+  animation: float 6s infinite ease-in;
+}
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: pink;
+  border-radius: 50%;
+}
+.heart::before { top: -10px; left: 0; }
+.heart::after { left: -10px; top: 0; }
+
+@keyframes float {
+  0% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
+}
+
+.container {
+  text-align: center;
+  background: rgba(255,255,255,0.15);
+  padding: 40px;
+  border-radius: 25px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px 22px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(45deg, #ff6ec4, #ff9a9e);
+  color: white;
+  cursor: pointer;
+}
+
+.hidden { display: none; }
+
+.typing {
+  border-right: 2px solid white;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: typing 3s steps(30), blink .7s infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  50% { border-color: transparent }
+}
+</style>
+</head>
+<body>
+
+<audio id="bgMusic" loop>
+  <source src="https://music.youtube.com/watch?v=kyqJ_FId-_w&si=yoXfKebnimNxl-ar " type="audio/mp3">
+</audio>
+
+<div class="heart" style="left:10%"></div>
+<div class="heart" style="left:30%"></div>
+<div class="heart" style="left:60%"></div>
+<div class="heart" style="left:80%"></div>
+
+<div class="container" id="loginBox">
+  <h2>💖 Enter Secret Code (nickname that I gave u)</h2>
+  <input type="password" id="pass">
+  <br>
+  <button onclick="checkPass()">Unlock</button>
+  <p id="msg"></p>
+</div>
+
+<div class="container hidden" id="mainContent">
+  <h2 class="typing">🎉 Surprise Unlocked!</h2>
+  <p>Welcome Moni. Hey ..i don’t say this enough, but u mean so much to me. U r notjust my bsf , u r my safe place,my biggest support,and the person who makes everything feel lighter. Din ses e jatoi kharp kisu hok jatoi karap din jak amr ,tor sathe kotha bolle ame sob thik . ami jani I have anger issues, ami pagol , toxic. But I really love u . tor hoytoh mone hoy j ami tore sob somoy boki but ami just eitaai chai j  tui valo thakish amr sarhe thakish r tore kw kisu bolte jeno nh pare er jonnein ami hoy toh tore onek somy kisu bole feli . abr onk somy ami just bujhaite jai kintu oita tui mone korish j ami tore boktesi. Ami asole kakhonoi tok kopsto dite cahai nh .tui toh jnish e ami tok katota valo bashi.no matter wt happens, im always been there for u  💕</p>
+  <button onclick="startGame()">Play Game</button>
+</div>
+
+<div class="container hidden" id="gameBox">
+  <h2>🎮 Mini Game</h2>
+  <p><strong>What is my fav number?</strong></p>
+  <p>Guess (1-20)</p>
+  <input type="number" id="guess">
+  <br>
+  <button onclick="checkGame()">Submit</button>
+  <button onclick="restartGame()">Restart</button>
+  <p id="gameMsg"></p>
+</div>
+
+<div class="container hidden" id="finalBox">
+  <h2 class="typing">💌 A Special Message</h2>
+  <p id="finalMsg"></p>
+</div>
+
+<script>
+let secret = 17;
+let score = 5;
+
+function checkPass(){
+  let input = document.getElementById('pass').value;
+  if(input === 'Moni'){
+    document.getElementById('loginBox').classList.add('hidden');
+    document.getElementById('mainContent').classList.remove('hidden');
+    document.getElementById('bgMusic').play();
+  } else {
+    document.getElementById('msg').innerText = '❌ Wrong';
+  }
+}
+
+function startGame(){
+  document.getElementById('mainContent').classList.add('hidden');
+  document.getElementById('gameBox').classList.remove('hidden');
+}
+
+function checkGame(){
+  let guess = parseInt(document.getElementById('guess').value);
+
+  if (guess < 1 || guess > 20) return;
+
+  if(guess === secret){
+    document.getElementById('gameBox').classList.add('hidden');
+    document.getElementById('finalBox').classList.remove('hidden');
+
+    // confetti 🎉
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+    // custom message
+    document.getElementById('finalMsg').innerText = 'Moni, you are truly special to me.  .If life were a sky full of ordinary stars, you’d be the one that glows a little brighter. the one I look for when everything feels dark. Somehow, in this huge, messy world, we found each other and that feels like magic to me. No matter where life takes us, a part of my heart will always carry you, like a quiet spell that never fades. You’re not just my bsf… you’re my safe place, my favorite story, and a little piece of forever<br> If I ever lose everything, I know I’d still be okay as long as I have u. that’s how important u r to me. U stayed when it was’t easy. U cared when u did’t have to , and somehow u made me feel understood without me even saying a word. Iff I could ever return to the real world, I would find u again  💖✨';
+  } else {
+    score--;
+    document.getElementById('gameMsg').innerText = 'Score: ' + score;
+  }
+}
+
+function restartGame(){
+  score = 5;
+  document.getElementById('gameMsg').innerText = '';
+}
+</script>
+
+</body>
+</html>
